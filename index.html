@@ -3,82 +3,218 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connecta — Agenda de Contatos</title>
+    <title>Connecta — Agenda de Contatos Inteligente</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Estilos -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <header class="main-header">
-        <div class="header-container">
+    <!-- Overlay Mobile -->
+    <div class="nav-overlay" id="nav-overlay"></div>
 
+    <!-- Header Principal -->
+    <header class="main-header" id="header">
+        <div class="header-container">
+            
+            <!-- Logo Connecta -->
             <a href="index.html" class="logo-link" title="Connecta Home">
-                <img src="assets/logo_connecta.png" alt="Logotipo do Connecta" class="logo-img" width="36" height="36">
-                <span class="logo-text">Connecta</span>
+                <div class="logo-badge">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </div>
+                <div class="logo-text-group">
+                    <span class="logo-brand">connecta</span>
+                    <span class="logo-tagline">AGENDA DE CONTATOS</span>
+                </div>
             </a>
 
-            <form class="search-form" action="#" method="GET" role="search">
+            <!-- Campo de Busca no Header -->
+            <form class="search-form" id="search-form" action="#" method="GET" role="search">
                 <div class="search-wrapper">
-                    <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="11" cy="11" r="8"></circle>
                         <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                     </svg>
-                    <input type="search" class="search-input" placeholder="Buscar contatos, agenda..." aria-label="Buscar no Connecta">
+                    <input type="search" class="search-input" id="search-input" placeholder="Buscar contatos, agenda..." aria-label="Buscar no Connecta" autocomplete="off">
+                </div>
+                <div class="search-dropdown" id="search-dropdown" hidden>
+                    <ul id="search-results-list"></ul>
                 </div>
             </form>
 
+            <!-- Ações do Cabeçalho -->
             <div class="header-actions">
                 <button type="button" class="btn btn-outline">Entrar</button>
                 <button type="button" class="btn btn-primary">Criar Conta</button>
-                <button type="button" class="btn-menu-mobile" aria-label="Abrir menu de navegação móvel">
-                    <svg class="hamburger-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <line x1="3" y1="12" x2="21" y2="12"></line>
-                        <line x1="3" y1="6" x2="21" y2="6"></line>
-                        <line x1="3" y1="18" x2="21" y2="18"></line>
-                    </svg>
+
+                <!-- Botão Menu Mobile -->
+                <button type="button" class="btn-menu-mobile" id="btn-menu" aria-label="Abrir menu de navegação">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
                 </button>
             </div>
 
         </div>
     </header>
 
-    <div class="app-layout">
-        <aside class="sidebar">
-            <nav class="sidebar-nav" aria-label="Navegação Lateral">
-                <ul class="sidebar-list">
-                    <li class="sidebar-item">
-                        <a href="index.html" class="sidebar-link active" aria-current="page">Contatos</a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a href="agenda.html" class="sidebar-link">Agenda</a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a href="tarefas.html" class="sidebar-link">Tarefas</a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a href="grupos.html" class="sidebar-link">Grupos</a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a href="lembretes.html" class="sidebar-link">Lembretes</a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a href="config.html" class="sidebar-link">Configurações</a>
-                    </li>
-                </ul>
-            </nav>
+    <!-- Drawer Mobile -->
+    <aside class="mobile-drawer" id="mobile-drawer">
+        <nav class="mobile-nav">
+            <a href="#" class="mobile-link active">Contatos</a>
+            <a href="#" class="mobile-link">Agenda</a>
+            <a href="#" class="mobile-link">Tarefas</a>
+            <a href="#" class="mobile-link">Grupos</a>
+            <a href="#" class="mobile-link">Lembretes</a>
+            <a href="#" class="mobile-link">Configurações</a>
+        </nav>
+    </aside>
 
-            <div class="sidebar-footer">
-                <a href="index.html" class="btn-back-home">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <line x1="19" y1="12" x2="5" y2="12"></line>
-                        <polyline points="12 19 5 12 12 5"></polyline>
-                    </svg>
-                </a>
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-container">
+            
+            <!-- Conteúdo Textual -->
+            <div class="hero-content">
+                <div class="badge-pill">
+                    <span class="badge-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+                    </span>
+                    <span>Gestão de contatos inteligente</span>
+                </div>
+
+                <h1 class="hero-title">
+                    Seu tempo é valioso.<br>
+                    <span class="text-highlight">Connecta cuida da agenda.</span>
+                </h1>
+
+                <p class="hero-subtitle">
+                    Organize seus contatos, agendamentos e compromissos de forma simples, rápida e segura.
+                </p>
+
+                <div class="hero-actions">
+                    <a href="#" class="btn-cta">
+                        Começar agora
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </a>
+                </div>
+
+                <div class="hero-checks">
+                    <div class="check-item">
+                        <span class="check-icon">✓</span>
+                        <span>Fácil de usar</span>
+                    </div>
+                    <div class="check-item">
+                        <span class="check-icon">✓</span>
+                        <span>Seus dados protegidos</span>
+                    </div>
+                </div>
             </div>
-        </aside>
 
-        <main class="main-content">
-        </main>
-    </div>
+            <!-- Preview do App / Mockup do Laptop -->
+            <div class="hero-preview">
+                <div class="laptop-frame">
+                    <div class="laptop-screen">
+                        <!-- Interface Simulada do Connecta -->
+                        <div class="app-window">
+                            <div class="app-sidebar">
+                                <div class="app-logo">
+                                    <span class="app-dot"></span> Connecta
+                                </div>
+                                <ul class="app-menu">
+                                    <li class="active">👥 Contatos</li>
+                                    <li>📅 Agenda</li>
+                                    <li>📋 Tarefas</li>
+                                    <li>🏷️ Grupos</li>
+                                </ul>
+                            </div>
+                            <div class="app-main">
+                                <div class="app-header">
+                                    <h3>Contatos</h3>
+                                    <button class="btn-add-mini">+ Novo</button>
+                                </div>
+                                <div class="contact-list">
+                                    <div class="contact-card">
+                                        <div class="avatar orange">A</div>
+                                        <div class="contact-info">
+                                            <strong>Ana Carolina</strong>
+                                            <small>ana.c@email.com</small>
+                                        </div>
+                                    </div>
+                                    <div class="contact-card">
+                                        <div class="avatar green">B</div>
+                                        <div class="contact-info">
+                                            <strong>Bruno Almeida</strong>
+                                            <small>bruno@email.com</small>
+                                        </div>
+                                    </div>
+                                    <div class="contact-card">
+                                        <div class="avatar blue">C</div>
+                                        <div class="contact-info">
+                                            <strong>Carlos Eduardo</strong>
+                                            <small>carlos@email.com</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="laptop-base"></div>
+                </div>
+            </div>
 
+        </div>
+    </section>
+
+    <!-- Seção de Destaques / Features -->
+    <section class="features-section">
+        <div class="features-container">
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                </div>
+                <h4>Centralize os seus contatos</h4>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    </svg>
+                </div>
+                <h4>Segurança de verdade</h4>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+                        <line x1="12" y1="18" x2="12.01" y2="18"></line>
+                    </svg>
+                </div>
+                <h4>Acesse de qualquer lugar</h4>
+            </div>
+
+        </div>
+    </section>
+
+    <script src="script.js"></script>
 </body>
 </html>
