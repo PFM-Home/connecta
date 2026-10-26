@@ -1,80 +1,89 @@
-document.addEventListener("DOMContentLoaded", () => {
-    // Elementos da Interface
-    const header = document.getElementById("header");
-    const btnMenu = document.getElementById("btn-menu");
-    const mobileDrawer = document.getElementById("mobile-drawer");
-    const navOverlay = document.getElementById("nav-overlay");
-    
-    // Elementos de Busca Dinâmica
-    const searchInput = document.getElementById("search-input");
-    const searchDropdown = document.getElementById("search-dropdown");
-    const searchResultsList = document.getElementById("search-results-list");
+"use strict";
 
-    // Base de dados simulada para busca instantânea de contatos
-    const contatos = [
-        { nome: "Ana Carolina", email: "ana.c@email.com" },
-        { nome: "Bruno Almeida", email: "bruno@email.com" },
-        { nome: "Carlos Eduardo", email: "carlos@email.com" },
-        { nome: "Daniela Martins", email: "daniela@email.com" },
-        { nome: "Fernanda Souza", email: "fernanda@email.com" }
-    ];
+/* Contatos de exemplo (troque pelos seus dados reais depois) */
+const CONTATOS = [
+  { nome: "Ana Carolina", email: "ana.c@email.com" },
+  { nome: "Bruno Almeida", email: "bruno@email.com" },
+  { nome: "Carlos Eduardo", email: "carlos@email.com" },
+];
 
-    /* 1. Header Fixo com Efeito de Sombra */
-    window.addEventListener("scroll", () => {
-        if (window.scrollY > 20) {
-            header.classList.add("scrolled");
-        } else {
-            header.classList.remove("scrolled");
-        }
-    });
+/* ---------- Menu mobile ---------- */
+const toggle = document.querySelector(".menu-toggle");
+const overlay = document.querySelector(".overlay");
 
-    /* 2. Controle do Menu Mobile Drawer */
-    const toggleMobileMenu = () => {
-        const isActive = mobileDrawer.classList.toggle("active");
-        navOverlay.classList.toggle("active");
-        btnMenu.classList.toggle("active");
-    };
+function setMenu(aberto) {
+  document.body.classList.toggle("menu-open", aberto);
+  toggle.setAttribute("aria-expanded", aberto);
+  toggle.setAttribute("aria-label", aberto ? "Fechar menu" : "Abrir menu");
+}
 
-    if (btnMenu) btnMenu.addEventListener("click", toggleMobileMenu);
-    if (navOverlay) navOverlay.addEventListener("click", toggleMobileMenu);
+toggle.addEventListener("click", () => {
+  setMenu(!document.body.classList.contains("menu-open"));
+});
 
-    /* 3. Busca Filtro em Tempo Real no Header */
-    if (searchInput) {
-        searchInput.addEventListener("input", (e) => {
-            const query = e.target.value.toLowerCase().trim();
+overlay.addEventListener("click", () => setMenu(false));
 
-            if (query.length > 0) {
-                const resultados = contatos.filter(c => 
-                    c.nome.toLowerCase().includes(query) || 
-                    c.email.toLowerCase().includes(query)
-                );
+document.querySelectorAll(".site-nav a").forEach((link) => {
+  link.addEventListener("click", () => setMenu(false));
+});
 
-                if (resultados.length > 0) {
-                    searchResultsList.innerHTML = resultados.map(c => `
-                        <li>
-                            <a href="#">
-                                <strong>${c.nome}</strong><br>
-                                <small style="color:#64748b">${c.email}</small>
-                            </a>
-                        </li>
-                    `).join("");
-                } else {
-                    searchResultsList.innerHTML = `
-                        <li style="padding:10px; color:#94a3b8; font-size:0.85rem;">
-                            Nenhum contato encontrado
-                        </li>`;
-                }
-                searchDropdown.hidden = false;
-            } else {
-                searchDropdown.hidden = true;
-            }
-        });
+/* Fecha a gaveta se a tela crescer além do breakpoint do CSS */
+matchMedia("(min-width: 1121px)").addEventListener("change", (e) => {
+  if (e.matches) setMenu(false);
+});
 
-        // Ocultar busca ao clicar fora
-        document.addEventListener("click", (e) => {
-            if (!e.target.closest("#search-form")) {
-                searchDropdown.hidden = true;
-            }
-        });
-    }
+/* ---------- Busca ---------- */
+const form = document.querySelector(".search");
+const input = form.querySelector("input");
+const resultados = form.querySelector(".search-results");
+
+/* Ignora acentos e maiúsculas: "joao" encontra "João" */
+const normalizar = (texto) =>
+  texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+
+function criarItem(titulo, detalhe) {
+  const li = document.createElement("li");
+  const strong = document.createElement("strong");
+  strong.textContent = titulo;
+  li.append(strong);
+
+  if (detalhe) {
+    const small = document.createElement("small");
+    small.textContent = detalhe;
+    li.append(small);
+  }
+  return li;
+}
+
+function fecharBusca() {
+  resultados.hidden = true;
+}
+
+function buscar(termo) {
+  const consulta = normalizar(termo.trim());
+  if (!consulta) return fecharBusca();
+
+  const achados = CONTATOS.filter(({ nome, email }) =>
+    normalizar(`${nome} ${email}`).includes(consulta)
+  );
+
+  const itens = achados.length
+    ? achados.map(({ nome, email }) => criarItem(nome, email))
+    : [criarItem("Nenhum contato encontrado")];
+
+  resultados.replaceChildren(...itens);
+  resultados.hidden = false;
+}
+
+input.addEventListener("input", () => buscar(input.value));
+form.addEventListener("submit", (e) => e.preventDefault());
+
+document.addEventListener("click", (e) => {
+  if (!form.contains(e.target)) fecharBusca();
+});
+
+document.addEventListener("keydown", (e) => {
+  if (e.key !== "Escape") return;
+  setMenu(false);
+  fecharBusca();
 });
