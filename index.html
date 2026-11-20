@@ -19,7 +19,6 @@
     <div class="container header-inner">
 
       <a class="logo" href="index.html">
-        <!-- Coloque sua logo em assets/logo_connecta.png -->
         <img src="assets/logo_connecta.png" alt="" width="36" height="36">
         <span>
           <strong>connecta</strong>
@@ -29,7 +28,7 @@
 
       <nav class="site-nav" id="menu" aria-label="Principal">
         <ul>
-          <li><a href="contatos.html" aria-current="page">Contatos</a></li>
+          <li><a href="index.html" aria-current="page">Início</a></li>
           <li><a href="agenda.html">Agenda</a></li>
           <li><a href="tarefas.html">Tarefas</a></li>
           <li><a href="grupos.html">Grupos</a></li>
@@ -47,9 +46,10 @@
         <ul class="search-results" id="search-results" aria-live="polite" hidden></ul>
       </form>
 
-      <div class="header-actions">
-        <button type="button" class="btn btn--ghost">Entrar</button>
-        <button type="button" class="btn btn--primary">Criar conta</button>
+      <!-- script.js substitui este conteúdo conforme o usuário esteja logado ou não -->
+      <div class="header-actions" id="auth-area">
+        <a class="btn btn--ghost" href="login.html">Entrar</a>
+        <a class="btn btn--primary" href="login.html?modo=cadastro">Criar conta</a>
       </div>
 
       <button type="button" class="menu-toggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="menu">
@@ -69,7 +69,7 @@
         <div class="hero-text">
           <h1>Seu tempo é valioso.<br>Connecta cuida da agenda.</h1>
           <p>Organize seus contatos, agendamentos e compromissos de forma simples, rápida e segura.</p>
-          <a class="btn btn--primary btn--lg" href="#">Começar agora</a>
+          <a class="btn btn--primary btn--lg" href="login.html?modo=cadastro">Começar agora</a>
           <ul class="checks">
             <li>Fácil de usar</li>
             <li>Seus dados protegidos</li>

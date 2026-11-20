@@ -1,11 +1,76 @@
 "use strict";
 
+const CHAVE_USUARIOS = "connecta_usuarios";
+const CHAVE_SESSAO = "connecta_sessao";
+
 /* Contatos de exemplo (troque pelos seus dados reais depois) */
 const CONTATOS = [
   { nome: "Ana Carolina", email: "ana.c@email.com" },
   { nome: "Bruno Almeida", email: "bruno@email.com" },
   { nome: "Carlos Eduardo", email: "carlos@email.com" },
 ];
+
+/* ---------- Sessão ---------- */
+function getSessao() {
+  try {
+    return JSON.parse(
+      localStorage.getItem(CHAVE_SESSAO) || sessionStorage.getItem(CHAVE_SESSAO) || "null"
+    );
+  } catch {
+    return null;
+  }
+}
+
+function estaLogado() {
+  const sessao = getSessao();
+  return !!(sessao && sessao.email);
+}
+
+function sair() {
+  localStorage.removeItem(CHAVE_SESSAO);
+  sessionStorage.removeItem(CHAVE_SESSAO);
+  window.location.href = "index.html";
+}
+
+/* Páginas com <body data-protegida> exigem login */
+function exigirLoginNaPagina() {
+  if (document.body.hasAttribute("data-protegida") && !estaLogado()) {
+    const pagina = window.location.pathname.split("/").pop() || "index.html";
+    window.location.replace("login.html?next=" + encodeURIComponent(pagina));
+  }
+}
+
+/* Mostra "Olá, nome" + "Sair" ou "Entrar" + "Criar conta" */
+function renderizarAuth() {
+  const area = document.getElementById("auth-area");
+  if (!area) return;
+
+  if (estaLogado()) {
+    const sessao = getSessao();
+    const nome = sessao.nome || sessao.email.split("@")[0];
+    area.innerHTML = "";
+
+    const saudacao = document.createElement("span");
+    saudacao.className = "auth-saudacao";
+    saudacao.textContent = `Olá, ${nome}`;
+
+    const botaoSair = document.createElement("button");
+    botaoSair.type = "button";
+    botaoSair.className = "btn btn--ghost";
+    botaoSair.textContent = "Sair";
+    botaoSair.addEventListener("click", sair);
+
+    area.append(saudacao, botaoSair);
+  } else {
+    area.innerHTML = `
+      <a class="btn btn--ghost" href="login.html">Entrar</a>
+      <a class="btn btn--primary" href="login.html?tab=register">Criar conta</a>
+    `;
+  }
+}
+
+exigirLoginNaPagina();
+renderizarAuth();
 
 /* ---------- Menu mobile ---------- */
 const toggle = document.querySelector(".menu-toggle");
@@ -104,8 +169,14 @@ function iniciarAutenticacao() {
   const formRegister = document.getElementById("form-register");
   if (!formLogin || !formRegister) return;
 
-  const CHAVE_USUARIOS = "connecta_usuarios";
-  const CHAVE_SESSAO = "connecta_sessao";
+  const params = new URLSearchParams(window.location.search);
+  const destino = params.get("next") || "index.html";
+
+  /* Já logado: não precisa ver o login de novo */
+  if (estaLogado()) {
+    window.location.replace(destino);
+    return;
+  }
 
   const tabs = document.querySelectorAll(".auth-tab");
 
@@ -114,7 +185,7 @@ function iniciarAutenticacao() {
 
   const emailValido = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
 
-  /* Gera um hash SHA-256 da senha (exige HTTPS ou localhost) */
+  /* Hash SHA-256 da senha (exige HTTPS ou localhost) */
   async function hashSenha(senha) {
     const buffer = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(senha));
     return [...new Uint8Array(buffer)].map((b) => b.toString(16).padStart(2, "0")).join("");
@@ -156,7 +227,7 @@ function iniciarAutenticacao() {
     } else {
       sessionStorage.setItem(CHAVE_SESSAO, sessao);
     }
-    window.location.href = "contatos.html";
+    window.location.href = destino;
   }
 
   /* Guarda o texto original dos botões */
@@ -167,7 +238,7 @@ function iniciarAutenticacao() {
   tabs.forEach((tab) => tab.addEventListener("click", () => ativarAba(tab.dataset.tab)));
 
   /* Abre direto na aba de cadastro se vier de "?tab=register" */
-  if (new URLSearchParams(window.location.search).get("tab") === "register") {
+  if (params.get("tab") === "register" || params.get("modo") === "cadastro") {
     ativarAba("register");
   }
 

@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Entrar ou criar conta — Connecta</title>
-  <meta name="description" content="Acesse sua conta ou crie uma nova no Connecta.">
+  <title>Entrar | Connecta</title>
+  <meta name="description" content="Entre ou crie sua conta no Connecta.">
 
   <link rel="icon" href="images/logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,7 +17,6 @@
 
   <header class="site-header">
     <div class="container header-inner">
-
       <a class="logo" href="index.html">
         <img src="assets/logo_connecta.png" alt="" width="36" height="36">
         <span>
@@ -25,90 +24,58 @@
           <small>Agenda de contatos</small>
         </span>
       </a>
-
-      <nav class="site-nav" id="menu" aria-label="Principal">
-        <ul>
-          <li><a href="contatos.html">Contatos</a></li>
-          <li><a href="agenda.html">Agenda</a></li>
-          <li><a href="tarefas.html">Tarefas</a></li>
-          <li><a href="grupos.html">Grupos</a></li>
-          <li><a href="lembretes.html">Lembretes</a></li>
-          <li><a href="configuracoes.html">Configurações</a></li>
-        </ul>
-      </nav>
-
-      <div class="header-actions">
-        <a class="btn btn--ghost" href="login.html" aria-current="page">Entrar</a>
-        <a class="btn btn--primary" href="login.html?tab=register">Criar conta</a>
-      </div>
-
-      <button type="button" class="menu-toggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="menu">
-        <span></span><span></span><span></span>
-      </button>
-
+      <div class="header-actions" id="auth-area"></div>
     </div>
   </header>
 
-  <div class="overlay"></div>
-
   <main>
-    <section class="auth">
+    <section class="auth-section">
       <div class="container">
         <div class="auth-card">
 
-          <div class="auth-tabs" role="tablist" aria-label="Acesso à conta">
-            <button type="button" role="tab" id="tab-login" class="auth-tab is-active"
-                    aria-selected="true" aria-controls="form-login" data-tab="login">Entrar</button>
-            <button type="button" role="tab" id="tab-register" class="auth-tab"
-                    aria-selected="false" aria-controls="form-register" data-tab="register">Criar conta</button>
+          <div class="auth-tabs" role="tablist">
+            <button type="button" class="auth-tab is-active" role="tab" data-tab="login" aria-selected="true" aria-controls="form-login">Entrar</button>
+            <button type="button" class="auth-tab" role="tab" data-tab="register" aria-selected="false" aria-controls="form-register">Criar conta</button>
           </div>
 
-          <!-- Formulário de login -->
-          <form id="form-login" class="auth-form" role="tabpanel" aria-labelledby="tab-login" novalidate>
+          <form class="auth-form" id="form-login" novalidate>
+            <h1>Bem-vindo de volta</h1>
             <div class="field">
               <label for="login-email">E-mail</label>
-              <input id="login-email" name="email" type="email" autocomplete="email" placeholder="voce@email.com" required>
+              <input type="email" id="login-email" name="email" autocomplete="email" required>
             </div>
-
             <div class="field">
               <label for="login-senha">Senha</label>
-              <input id="login-senha" name="senha" type="password" autocomplete="current-password" placeholder="Sua senha" required>
+              <input type="password" id="login-senha" name="senha" autocomplete="current-password" required>
             </div>
-
-            <div class="auth-options">
-              <label>
-                <input type="checkbox" name="lembrar"> Manter conectado
-              </label>
-            </div>
-
+            <label class="auth-lembrar">
+              <input type="checkbox" name="lembrar" checked>
+              Manter conectado
+            </label>
+            <p class="auth-msg" role="alert"></p>
             <button type="submit" class="btn btn--primary btn--lg">Entrar</button>
-            <p class="auth-msg" role="alert" aria-live="polite"></p>
           </form>
 
-          <!-- Formulário de cadastro -->
-          <form id="form-register" class="auth-form" role="tabpanel" aria-labelledby="tab-register" hidden novalidate>
+          <form class="auth-form" id="form-register" hidden novalidate>
+            <h1>Crie sua conta</h1>
             <div class="field">
               <label for="reg-nome">Nome</label>
-              <input id="reg-nome" name="nome" type="text" autocomplete="name" placeholder="Seu nome" required>
+              <input type="text" id="reg-nome" name="nome" autocomplete="name" required>
             </div>
-
             <div class="field">
               <label for="reg-email">E-mail</label>
-              <input id="reg-email" name="email" type="email" autocomplete="email" placeholder="voce@email.com" required>
+              <input type="email" id="reg-email" name="email" autocomplete="email" required>
             </div>
-
             <div class="field">
               <label for="reg-senha">Senha</label>
-              <input id="reg-senha" name="senha" type="password" autocomplete="new-password" placeholder="Mínimo de 8 caracteres" required>
+              <input type="password" id="reg-senha" name="senha" autocomplete="new-password" minlength="8" required>
             </div>
-
             <div class="field">
               <label for="reg-confirmar">Confirmar senha</label>
-              <input id="reg-confirmar" name="confirmar" type="password" autocomplete="new-password" placeholder="Repita a senha" required>
+              <input type="password" id="reg-confirmar" name="confirmar" autocomplete="new-password" required>
             </div>
-
+            <p class="auth-msg" role="alert"></p>
             <button type="submit" class="btn btn--primary btn--lg">Criar conta</button>
-            <p class="auth-msg" role="alert" aria-live="polite"></p>
           </form>
 
         </div>
