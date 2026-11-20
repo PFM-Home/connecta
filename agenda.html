@@ -1,85 +1,997 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connecta — Agenda de Contatos</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Agenda | Connecta</title>
+  <link rel="icon" href="images/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600&display=swap">
+  <style>
+    :root {
+      --primaria: #4f46e5;
+      --primaria-suave: #eef2ff;
+      --primaria-escura: #4338ca;
+      --texto: #1f2937;
+      --texto-suave: #6b7280;
+      --borda: #e5e7eb;
+      --fundo: #f8fafc;
+      --branco: #ffffff;
+      --verde: #16a34a;
+      --amarelo: #d97706;
+      --vermelho: #dc2626;
+      --raio: 14px;
+      --sombra: 0 4px 18px rgba(15, 23, 42, 0.06);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Inter", system-ui, sans-serif;
+      background: var(--fundo);
+      color: var(--texto);
+      min-height: 100vh;
+    }
+
+    [hidden] { display: none !important; }
+
+    /* ---------- Cabeçalho ---------- */
+    .topo {
+      background: var(--branco);
+      border-bottom: 1px solid var(--borda);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .topo-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--texto);
+    }
+    .logo strong {
+      font-family: "DM Serif Display", serif;
+      font-weight: 400;
+      font-size: 1.2rem;
+    }
+    .nav { display: flex; gap: 4px; flex-wrap: wrap; }
+    .nav a {
+      text-decoration: none;
+      color: var(--texto-suave);
+      padding: 7px 12px;
+      border-radius: 999px;
+      font-size: 0.92rem;
+    }
+    .nav a:hover { background: var(--fundo); color: var(--texto); }
+    .nav a[aria-current="page"] {
+      background: var(--primaria-suave);
+      color: var(--primaria);
+      font-weight: 600;
+    }
+    .usuario {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.9rem;
+      color: var(--texto-suave);
+    }
+    .usuario strong { color: var(--texto); }
+
+    /* ---------- Layout ---------- */
+    .container { max-width: 1100px; margin: 0 auto; padding: 32px 20px 60px; }
+
+    .cabecalho {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+    .cabecalho h1 {
+      font-family: "DM Serif Display", serif;
+      font-weight: 400;
+      font-size: 2rem;
+      margin: 0 0 4px;
+    }
+    .cabecalho p { margin: 0; color: var(--texto-suave); }
+
+    /* ---------- Botões ---------- */
+    .btn {
+      border: 1px solid transparent;
+      border-radius: 10px;
+      padding: 10px 16px;
+      font: inherit;
+      font-size: 0.92rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .btn:active { transform: scale(0.98); }
+    .btn-primario { background: var(--primaria); color: #fff; }
+    .btn-primario:hover { background: var(--primaria-escura); }
+    .btn-secundario { background: var(--branco); border-color: var(--borda); color: var(--texto); }
+    .btn-secundario:hover { background: var(--fundo); }
+    .btn-perigo { background: #fee2e2; color: var(--vermelho); }
+    .btn-perigo:hover { background: #fecaca; }
+    .btn-pequeno { padding: 6px 12px; font-size: 0.83rem; }
+    .btn-texto {
+      background: none;
+      border: none;
+      color: var(--primaria);
+      font: inherit;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    /* ---------- Filtros ---------- */
+    .filtros {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+      background: var(--branco);
+      border: 1px solid var(--borda);
+      border-radius: var(--raio);
+      padding: 12px;
+      margin-bottom: 20px;
+      box-shadow: var(--sombra);
+    }
+    .abas { display: flex; gap: 6px; flex-wrap: wrap; }
+    .aba {
+      border: none;
+      background: transparent;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font: inherit;
+      font-size: 0.9rem;
+      color: var(--texto-suave);
+      cursor: pointer;
+    }
+    .aba:hover { background: var(--fundo); }
+    .aba.ativa { background: var(--primaria-suave); color: var(--primaria); font-weight: 600; }
+    .filtro-mes {
+      margin-left: auto;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .filtro-mes input {
+      padding: 8px 10px;
+      border: 1px solid var(--borda);
+      border-radius: 8px;
+      font: inherit;
+    }
+
+    /* ---------- Lista ---------- */
+    .lista { display: grid; gap: 14px; }
+    .card {
+      background: var(--branco);
+      border: 1px solid var(--borda);
+      border-radius: var(--raio);
+      padding: 18px;
+      display: grid;
+      grid-template-columns: 74px 1fr;
+      gap: 18px;
+      box-shadow: var(--sombra);
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .card:hover, .card:focus-visible {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.1);
+      outline: none;
+    }
+    .data-bloco {
+      background: var(--primaria-suave);
+      color: var(--primaria);
+      border-radius: 12px;
+      text-align: center;
+      padding: 10px 6px;
+      align-self: start;
+    }
+    .data-bloco .dia { display: block; font-size: 1.7rem; font-weight: 700; line-height: 1; }
+    .data-bloco .mes { display: block; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 4px; }
+    .data-bloco .ano { display: block; font-size: 0.72rem; opacity: 0.7; }
+    .card h3 { margin: 0 0 6px; font-size: 1.1rem; }
+    .meta {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      font-size: 0.88rem;
+      color: var(--texto-suave);
+      margin-bottom: 10px;
+    }
+    .badges { display: flex; gap: 8px; flex-wrap: wrap; }
+    .badge {
+      font-size: 0.75rem;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: var(--fundo);
+      color: var(--texto-suave);
+      border: 1px solid var(--borda);
+      font-weight: 500;
+    }
+    .badge.verde { background: #dcfce7; color: #166534; border-color: #bbf7d0; }
+    .badge.amarelo { background: #fef3c7; color: #92400e; border-color: #fde68a; }
+    .badge.vermelho { background: #fee2e2; color: #991b1b; border-color: #fecaca; }
+    .badge.roxo { background: var(--primaria-suave); color: var(--primaria); border-color: #c7d2fe; }
+
+    .vazio {
+      text-align: center;
+      padding: 48px 20px;
+      background: var(--branco);
+      border: 2px dashed var(--borda);
+      border-radius: var(--raio);
+      color: var(--texto-suave);
+    }
+    .vazio strong { color: var(--texto); display: block; margin-bottom: 6px; }
+
+    /* ---------- Modais ---------- */
+    dialog {
+      border: none;
+      border-radius: 18px;
+      padding: 0;
+      width: min(580px, 94vw);
+      max-height: 90vh;
+      box-shadow: 0 20px 60px rgba(15, 23, 42, 0.25);
+    }
+    dialog::backdrop { background: rgba(15, 23, 42, 0.45); }
+    .modal { padding: 24px; }
+    .modal-topo {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      gap: 12px;
+    }
+    .modal-topo h2 {
+      margin: 0;
+      font-family: "DM Serif Display", serif;
+      font-weight: 400;
+      font-size: 1.5rem;
+    }
+    .fechar {
+      background: none;
+      border: none;
+      font-size: 1.6rem;
+      cursor: pointer;
+      color: var(--texto-suave);
+      line-height: 1;
+    }
+
+    .campos { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .campo { display: flex; flex-direction: column; gap: 6px; }
+    .campo.inteiro { grid-column: 1 / -1; }
+    .campo label { font-size: 0.85rem; font-weight: 600; }
+    .obrigatorio { color: var(--vermelho); font-weight: 700; }
+    .campo input, .campo select, .campo textarea {
+      padding: 10px 12px;
+      border: 1px solid var(--borda);
+      border-radius: 10px;
+      font: inherit;
+      background: var(--branco);
+      color: var(--texto);
+    }
+    .campo textarea { resize: vertical; min-height: 70px; }
+    .campo input:focus, .campo select:focus, .campo textarea:focus {
+      outline: 2px solid var(--primaria);
+      outline-offset: 0;
+      border-color: transparent;
+    }
+    .campo input[aria-invalid="true"], .campo select[aria-invalid="true"] {
+      border-color: var(--vermelho);
+      background: #fef2f2;
+    }
+    .campo small { color: var(--texto-suave); font-size: 0.78rem; }
+    .erro-campo { color: var(--vermelho); font-size: 0.78rem; min-height: 1em; }
+    .checkbox { display: flex; gap: 10px; align-items: center; font-size: 0.9rem; font-weight: 500; }
+    .legenda { font-size: 0.8rem; color: var(--texto-suave); margin: 14px 0 0; }
+    .aviso-geral { color: var(--vermelho); font-size: 0.88rem; margin: 10px 0 0; min-height: 1em; }
+    .acoes {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    .acoes.esquerda { justify-content: space-between; }
+
+    .bloco { margin-top: 18px; }
+    .bloco h4 {
+      margin: 0 0 8px;
+      font-size: 0.8rem;
+      color: var(--texto-suave);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .bloco p { margin: 0; line-height: 1.5; white-space: pre-line; }
+    .pessoas { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+    .pessoas li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      background: var(--fundo);
+      border-radius: 10px;
+      font-size: 0.9rem;
+    }
+    .pessoas .botoes { display: flex; gap: 6px; }
+    .rsvp { display: flex; gap: 8px; flex-wrap: wrap; }
+    .rsvp button {
+      flex: 1;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid var(--borda);
+      background: var(--branco);
+      font: inherit;
+      font-size: 0.88rem;
+      cursor: pointer;
+      min-width: 90px;
+    }
+    .rsvp button.vai { background: #dcfce7; border-color: var(--verde); color: #166534; font-weight: 600; }
+    .rsvp button.talvez { background: #fef3c7; border-color: var(--amarelo); color: #92400e; font-weight: 600; }
+    .rsvp button.nao { background: #fee2e2; border-color: var(--vermelho); color: #991b1b; font-weight: 600; }
+    .nota { font-size: 0.88rem; color: var(--texto-suave); margin: 0; }
+
+    /* ---------- Notificação ---------- */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--texto);
+      color: #fff;
+      padding: 12px 18px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s;
+    }
+    .toast.visivel { opacity: 1; }
+
+    @media (max-width: 640px) {
+      .campos { grid-template-columns: 1fr; }
+      .card { grid-template-columns: 1fr; }
+      .data-bloco { display: flex; gap: 8px; align-items: baseline; justify-content: flex-start; padding: 8px 12px; }
+      .data-bloco .dia { font-size: 1.2rem; }
+      .filtro-mes { margin-left: 0; width: 100%; }
+      .filtro-mes input { flex: 1; }
+      .usuario { margin-left: 0; }
+    }
+  </style>
 </head>
 <body>
 
-    <header class="main-header">
-        <div class="header-container">
-
-            <a href="index.html" class="logo-link" title="Connecta Home">
-                <img src="assets/logo_connecta.png" alt="Logotipo do Connecta" class="logo-img" width="36" height="36">
-                <span class="logo-text">Connecta</span>
-            </a>
-
-            <form class="search-form" action="#" method="GET" role="search">
-                <div class="search-wrapper">
-                    <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                    </svg>
-                    <input type="search" class="search-input" placeholder="Buscar no Connecta..." aria-label="Buscar no Connecta">
-                </div>
-            </form>
-
-            <div class="header-actions">
-                <button type="button" class="btn btn-outline">Entrar</button>
-                <button type="button" class="btn btn-primary">Criar Conta</button>
-                <button type="button" class="btn-menu-mobile" aria-label="Abrir menu de navegação móvel">
-                    <svg class="hamburger-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <line x1="3" y1="12" x2="21" y2="12"></line>
-                        <line x1="3" y1="6" x2="21" y2="6"></line>
-                        <line x1="3" y1="18" x2="21" y2="18"></line>
-                    </svg>
-                </button>
-            </div>
-
-        </div>
-    </header>
-
-    <div class="app-layout">
-        <aside class="sidebar">
-            <nav class="sidebar-nav" aria-label="Navegação Lateral">
-                <ul class="sidebar-list">
-                    <li class="sidebar-item">
-                        <a href="index.html" class="sidebar-link">Contatos</a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a href="agenda.html" class="sidebar-link">Agenda</a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a href="tarefas.html" class="sidebar-link">Tarefas</a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a href="grupos.html" class="sidebar-link">Grupos</a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a href="lembretes.html" class="sidebar-link">Lembretes</a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a href="configuracoes.html" class="sidebar-link">Configurações</a>
-                    </li>
-                </ul>
-            </nav>
-
-            <div class="sidebar-footer">
-                <a href="index.html" class="btn-back-home">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <line x1="19" y1="12" x2="5" y2="12"></line>
-                        <polyline points="12 19 5 12 12 5"></polyline>
-                    </svg>
-                    <span>Voltar ao Início</span>
-                </a>
-            </div>
-        </aside>
-
-        <main class="main-content">
-        </main>
+  <header class="topo">
+    <div class="topo-inner">
+      <a class="logo" href="index.html">
+        <img src="assets/logo_connecta.png" alt="" width="34" height="34">
+        <strong>connecta</strong>
+      </a>
+      <nav class="nav" aria-label="Principal">
+        <a href="index.html">Contatos</a>
+        <a href="agenda.html" aria-current="page">Agenda</a>
+        <a href="tarefas.html">Tarefas</a>
+        <a href="grupos.html">Grupos</a>
+        <a href="lembretes.html">Lembretes</a>
+        <a href="configuracoes.html">Configurações</a>
+      </nav>
+      <div class="usuario" id="area-usuario"></div>
     </div>
+  </header>
+
+  <main class="container">
+    <section class="cabecalho">
+      <div>
+        <h1>Agenda</h1>
+        <p>Crie reuniões, convide pessoas e acompanhe quem vai.</p>
+      </div>
+      <button type="button" class="btn btn-primario" id="btn-nova">+ Nova reunião</button>
+    </section>
+
+    <section class="filtros" aria-label="Filtros">
+      <div class="abas" role="tablist">
+        <button type="button" class="aba ativa" data-aba="todos" role="tab" aria-selected="true">Todas</button>
+        <button type="button" class="aba" data-aba="minhas" role="tab" aria-selected="false">Minhas</button>
+        <button type="button" class="aba" data-aba="convites" role="tab" aria-selected="false">Convites</button>
+        <button type="button" class="aba" data-aba="pedidos" role="tab" aria-selected="false">Meus pedidos</button>
+      </div>
+      <div class="filtro-mes">
+        <input type="month" id="filtro-mes" aria-label="Filtrar por mês">
+        <button type="button" class="btn-texto" id="limpar-mes">Limpar</button>
+      </div>
+    </section>
+
+    <section id="lista" class="lista" aria-live="polite"></section>
+  </main>
+
+  <!-- Modal: nova reunião -->
+  <dialog id="modal-nova">
+    <form class="modal" id="form-nova" novalidate>
+      <div class="modal-topo">
+        <h2>Nova reunião</h2>
+        <button type="button" class="fechar" data-fechar aria-label="Fechar">&times;</button>
+      </div>
+
+      <div class="campos">
+        <div class="campo inteiro">
+          <label for="titulo">Título <span class="obrigatorio">*</span></label>
+          <input id="titulo" type="text" maxlength="100" placeholder="Ex.: Reunião de planejamento" required>
+          <span class="erro-campo" data-erro-para="titulo"></span>
+        </div>
+
+        <div class="campo">
+          <label for="data">Data <span class="obrigatorio">*</span></label>
+          <input id="data" type="date" required>
+          <span class="erro-campo" data-erro-para="data"></span>
+        </div>
+
+        <div class="campo">
+          <label for="hora">Horário <span class="obrigatorio">*</span></label>
+          <input id="hora" type="time" required>
+          <span class="erro-campo" data-erro-para="hora"></span>
+        </div>
+
+        <div class="campo inteiro">
+          <label for="local">Local ou link</label>
+          <input id="local" type="text" maxlength="150" placeholder="Sala 2, Google Meet, endereço...">
+        </div>
+
+        <div class="campo inteiro">
+          <label for="descricao">Descrição</label>
+          <textarea id="descricao" maxlength="500" placeholder="Pauta, observações..."></textarea>
+        </div>
+
+        <div class="campo">
+          <label for="visibilidade">Quem pode ver <span class="obrigatorio">*</span></label>
+          <select id="visibilidade" required>
+            <option value="publica">Pública (todos os usuários)</option>
+            <option value="privada">Privada (só convidados)</option>
+          </select>
+          <span class="erro-campo" data-erro-para="visibilidade"></span>
+        </div>
+
+        <div class="campo">
+          <label class="checkbox">
+            <input type="checkbox" id="aceita-pedidos" checked>
+            Aceitar pedidos de participação
+          </label>
+        </div>
+
+        <div class="campo inteiro">
+          <label for="convidados">Convidados</label>
+          <input id="convidados" type="text" placeholder="Ana, Bruno, Carla">
+          <small>Separe os nomes por vírgula. Convidados confirmam presença no detalhe da reunião.</small>
+        </div>
+      </div>
+
+      <p class="legenda"><span class="obrigatorio">*</span> Campos obrigatórios</p>
+      <p class="aviso-geral" id="aviso-nova" role="alert"></p>
+
+      <div class="acoes">
+        <button type="button" class="btn btn-secundario" data-fechar>Cancelar</button>
+        <button type="submit" class="btn btn-primario">Criar reunião</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Modal: detalhes -->
+  <dialog id="modal-detalhe">
+    <div class="modal" id="conteudo-detalhe"></div>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(() => {
+  "use strict";
+
+  const CHAVE_EVENTOS = "connecta_agenda_eventos";
+  const CHAVE_SESSAO = "connecta_sessao";
+
+  /* ================= Sessão ================= */
+
+  function lerSessao() {
+    const bruto = localStorage.getItem(CHAVE_SESSAO) ?? sessionStorage.getItem(CHAVE_SESSAO);
+    if (!bruto) return null;
+    try {
+      const s = JSON.parse(bruto);
+      if (typeof s !== "object" || s === null) return { id: String(s), nome: String(s) };
+      const nome = s.nome || s.name || s.usuario?.nome || s.email || "Usuário";
+      const id = s.id || s.usuarioId || s.email || nome;
+      return { id: String(id), nome: String(nome) };
+    } catch {
+      return { id: bruto, nome: bruto };
+    }
+  }
+
+  const eu = lerSessao();
+  if (!eu) {
+    location.replace("login.html?next=agenda.html");
+    return;
+  }
+
+  function sair() {
+    localStorage.removeItem(CHAVE_SESSAO);
+    sessionStorage.removeItem(CHAVE_SESSAO);
+    location.href = "login.html";
+  }
+
+  document.getElementById("area-usuario").innerHTML =
+    `Olá, <strong>${esc(eu.nome)}</strong> <button type="button" class="btn btn-secundario btn-pequeno" id="btn-sair">Sair</button>`;
+  document.getElementById("btn-sair").addEventListener("click", sair);
+
+  /* ================= Utilidades ================= */
+
+  function esc(t) {
+    return String(t ?? "").replace(/[&<>"']/g, (c) =>
+      ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  }
+  const norm = (t) => String(t ?? "").trim().toLowerCase();
+  const gerarId = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+  const hojeISO = () => new Date().toLocaleDateString("en-CA");
+
+  const MESES = ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"];
+  const MESES_LONGOS = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"];
+  const DIAS = ["domingo", "segunda-feira", "terça-feira", "quarta-feira", "quinta-feira", "sexta-feira", "sábado"];
+
+  function partesData(dataISO) {
+    const [a, m, d] = dataISO.split("-").map(Number);
+    const dt = new Date(a, m - 1, d);
+    return {
+      dia: String(d).padStart(2, "0"),
+      mes: MESES[m - 1],
+      mesLongo: MESES_LONGOS[m - 1],
+      ano: a,
+      semana: DIAS[dt.getDay()],
+    };
+  }
+
+  function mostrarToast(texto) {
+    const t = document.getElementById("toast");
+    t.textContent = texto;
+    t.classList.add("visivel");
+    clearTimeout(mostrarToast.timer);
+    mostrarToast.timer = setTimeout(() => t.classList.remove("visivel"), 2600);
+  }
+
+  /* ================= Armazenamento ================= */
+
+  let eventos = [];
+
+  function carregarEventos() {
+    try {
+      const dados = JSON.parse(localStorage.getItem(CHAVE_EVENTOS));
+      eventos = Array.isArray(dados) ? dados : [];
+    } catch {
+      eventos = [];
+    }
+  }
+
+  function salvarEventos() {
+    try {
+      localStorage.setItem(CHAVE_EVENTOS, JSON.stringify(eventos));
+      return true;
+    } catch {
+      mostrarToast("Não foi possível salvar. Verifique o armazenamento do navegador.");
+      return false;
+    }
+  }
+
+  /* ================= Regras de acesso ================= */
+
+  const souOrganizador = (e) => e.criador.id === eu.id;
+  const minhaParticipacao = (e) =>
+    e.convidados.find((c) => c.id === eu.id || (!c.id && norm(c.nome) === norm(eu.nome)));
+  const souConvidado = (e) => !!minhaParticipacao(e);
+  const meuPedido = (e) => e.pedidos.find((p) => p.id === eu.id);
+
+  const podeVer = (e) =>
+    souOrganizador(e) || e.visibilidade === "publica" || souConvidado(e) || !!meuPedido(e);
+
+  const podePedir = (e) =>
+    !souOrganizador(e) && e.aceitaPedidos && !souConvidado(e) && !meuPedido(e);
+
+  /* ================= Lista ================= */
+
+  const lista = document.getElementById("lista");
+  const filtroMes = document.getElementById("filtro-mes");
+  let abaAtiva = "todos";
+
+  function eventosFiltrados() {
+    const mes = filtroMes.value;
+    return eventos
+      .filter(podeVer)
+      .filter((e) => !mes || e.data.startsWith(mes))
+      .filter((e) => {
+        if (abaAtiva === "minhas") return souOrganizador(e);
+        if (abaAtiva === "convites") return souConvidado(e) && !souOrganizador(e);
+        if (abaAtiva === "pedidos") return !!meuPedido(e);
+        return true;
+      })
+      .sort((a, b) => (a.data + a.hora).localeCompare(b.data + b.hora));
+  }
+
+  function badgeStatus(e) {
+    if (souOrganizador(e)) return `<span class="badge roxo">Organizador</span>`;
+    const p = minhaParticipacao(e);
+    if (p) {
+      const mapa = {
+        vai: ["verde", "Você vai"],
+        talvez: ["amarelo", "Talvez"],
+        nao: ["vermelho", "Você não vai"],
+      };
+      const [cor, txt] = mapa[p.resposta] || ["", "Convidado"];
+      return `<span class="badge ${cor}">${txt}</span>`;
+    }
+    const pd = meuPedido(e);
+    if (pd) {
+      const mapa = { pendente: ["amarelo", "Pedido pendente"], aceito: ["verde", "Pedido aceito"], recusado: ["vermelho", "Pedido recusado"] };
+      const [cor, txt] = mapa[pd.estado];
+      return `<span class="badge ${cor}">${txt}</span>`;
+    }
+    return "";
+  }
+
+  function renderLista() {
+    const itens = eventosFiltrados();
+
+    if (!itens.length) {
+      lista.innerHTML = `
+        <div class="vazio">
+          <strong>Nenhuma reunião encontrada</strong>
+          Crie uma nova reunião ou ajuste os filtros.
+        </div>`;
+      return;
+    }
+
+    lista.innerHTML = itens.map((e) => {
+      const f = partesData(e.data);
+      const confirmados = e.convidados.filter((c) => c.resposta === "vai").length;
+      const pendentes = e.pedidos.filter((p) => p.estado === "pendente").length;
+      return `
+        <article class="card" data-id="${esc(e.id)}" tabindex="0" role="button" aria-label="Abrir ${esc(e.titulo)}">
+          <div class="data-bloco">
+            <span class="dia">${f.dia}</span>
+            <span class="mes">${f.mes}</span>
+            <span class="ano">${f.ano}</span>
+          </div>
+          <div>
+            <h3>${esc(e.titulo)}</h3>
+            <div class="meta">
+              <span>🕒 ${esc(e.hora)}</span>
+              <span>📍 ${esc(e.local || "Sem local definido")}</span>
+              <span>👥 ${confirmados} confirmado(s)</span>
+            </div>
+            <div class="badges">
+              <span class="badge">${e.visibilidade === "publica" ? "Pública" : "Privada"}</span>
+              ${e.aceitaPedidos ? `<span class="badge">Aceita pedidos</span>` : ""}
+              ${souOrganizador(e) && pendentes ? `<span class="badge amarelo">${pendentes} pedido(s) pendente(s)</span>` : ""}
+              ${badgeStatus(e)}
+            </div>
+          </div>
+        </article>`;
+    }).join("");
+  }
+
+  /* ================= Nova reunião ================= */
+
+  const modalNova = document.getElementById("modal-nova");
+  const formNova = document.getElementById("form-nova");
+  const campos = {
+    titulo: document.getElementById("titulo"),
+    data: document.getElementById("data"),
+    hora: document.getElementById("hora"),
+    visibilidade: document.getElementById("visibilidade"),
+  };
+
+  function marcarErro(nome, mensagem) {
+    const campo = campos[nome];
+    campo.setAttribute("aria-invalid", mensagem ? "true" : "false");
+    document.querySelector(`[data-erro-para="${nome}"]`).textContent = mensagem || "";
+  }
+
+  function limparErros() {
+    Object.keys(campos).forEach((n) => marcarErro(n, ""));
+    document.getElementById("aviso-nova").textContent = "";
+  }
+
+  function validarNova() {
+    limparErros();
+    let valido = true;
+    const titulo = campos.titulo.value.trim();
+    const data = campos.data.value;
+    const hora = campos.hora.value;
+
+    if (!titulo) { marcarErro("titulo", "Informe o título."); valido = false; }
+    if (!data) { marcarErro("data", "Escolha a data."); valido = false; }
+    else if (data < hojeISO()) { marcarErro("data", "A data não pode ser anterior a hoje."); valido = false; }
+    if (!hora) { marcarErro("hora", "Escolha o horário."); valido = false; }
+    if (!campos.visibilidade.value) { marcarErro("visibilidade", "Escolha quem pode ver."); valido = false; }
+
+    if (!valido) {
+      document.getElementById("aviso-nova").textContent = "Preencha os campos obrigatórios marcados com *.";
+      const primeiro = Object.keys(campos).find((n) => campos[n].getAttribute("aria-invalid") === "true");
+      if (primeiro) campos[primeiro].focus();
+    }
+    return valido;
+  }
+
+  function abrirNova() {
+    formNova.reset();
+    limparErros();
+    document.getElementById("aceita-pedidos").checked = true;
+    campos.data.min = hojeISO();
+    modalNova.showModal();
+    campos.titulo.focus();
+  }
+
+  formNova.addEventListener("submit", (ev) => {
+    ev.preventDefault();
+    if (!validarNova()) return;
+
+    const nomes = document.getElementById("convidados").value
+      .split(",").map((n) => n.trim()).filter(Boolean);
+    const unicos = [...new Map(nomes.map((n) => [norm(n), n])).values()]
+      .filter((n) => norm(n) !== norm(eu.nome));
+
+    const evento = {
+      id: gerarId(),
+      titulo: campos.titulo.value.trim(),
+      descricao: document.getElementById("descricao").value.trim(),
+      data: campos.data.value,
+      hora: campos.hora.value,
+      local: document.getElementById("local").value.trim(),
+      visibilidade: campos.visibilidade.value,
+      aceitaPedidos: document.getElementById("aceita-pedidos").checked,
+      criador: { id: eu.id, nome: eu.nome },
+      convidados: unicos.map((nome) => ({ id: null, nome, resposta: null })),
+      pedidos: [],
+      criadoEm: Date.now(),
+    };
+
+    eventos.push(evento);
+    if (!salvarEventos()) {
+      eventos.pop();
+      return;
+    }
+
+    modalNova.close();
+    filtroMes.value = evento.data.slice(0, 7);
+    abaAtiva = "todos";
+    atualizarAbas();
+    renderLista();
+    mostrarToast("Reunião criada com sucesso.");
+  });
+
+  /* ================= Detalhes ================= */
+
+  const modalDetalhe = document.getElementById("modal-detalhe");
+  const conteudo = document.getElementById("conteudo-detalhe");
+  let eventoAberto = null;
+
+  function rotuloResposta(r) {
+    return { vai: "Vai", talvez: "Talvez", nao: "Não vai" }[r] || "Sem resposta";
+  }
+
+  function classeResposta(r) {
+    return { vai: "verde", talvez: "amarelo", nao: "vermelho" }[r] || "";
+  }
+
+  function renderDetalhe(id) {
+    const e = eventos.find((x) => x.id === id);
+    if (!e || !podeVer(e)) {
+      modalDetalhe.close();
+      return;
+    }
+    eventoAberto = e.id;
+    const f = partesData(e.data);
+    const p = minhaParticipacao(e);
+    const pedido = meuPedido(e);
+    const organizador = souOrganizador(e);
+
+    const rsvp = p ? `
+      <div class="bloco">
+        <h4>Sua presença</h4>
+        <div class="rsvp">
+          <button type="button" data-acao="resposta" data-valor="vai" class="${p.resposta === "vai" ? "vai" : ""}">Vou</button>
+          <button type="button" data-acao="resposta" data-valor="talvez" class="${p.resposta === "talvez" ? "talvez" : ""}">Talvez</button>
+          <button type="button" data-acao="resposta" data-valor="nao" class="${p.resposta === "nao" ? "nao" : ""}">Não vou</button>
+        </div>
+      </div>` : "";
+
+    const pedir = podePedir(e) ? `
+      <div class="bloco">
+        <button type="button" class="btn btn-primario" data-acao="pedir">Pedir para participar</button>
+      </div>` : "";
+
+    const statusPedido = pedido && pedido.estado === "pendente"
+      ? `<p class="nota bloco">Seu pedido está aguardando aprovação do organizador.</p>` : "";
+
+    const listaPedidos = organizador ? `
+      <div class="bloco">
+        <h4>Pedidos de participação</h4>
+        ${e.pedidos.length ? `<ul class="pessoas">${e.pedidos.map((pd) => `
+          <li>
+            <span>${esc(pd.nome)} <small>(${esc(pd.estado)})</small></span>
+            ${pd.estado === "pendente" ? `
+              <span class="botoes">
+                <button type="button" class="btn btn-primario btn-pequeno" data-acao="aceitar" data-pessoa="${esc(pd.id)}">Aceitar</button>
+                <button type="button" class="btn btn-perigo btn-pequeno" data-acao="recusar" data-pessoa="${esc(pd.id)}">Recusar</button>
+              </span>` : ""}
+          </li>`).join("")}</ul>`
+        : `<p class="nota">Nenhum pedido ainda.</p>`}
+      </div>` : "";
+
+    const participantes = `
+      <div class="bloco">
+        <h4>Participantes</h4>
+        ${e.convidados.length ? `<ul class="pessoas">${e.convidados.map((c) => `
+          <li>
+            <span>${esc(c.nome)}</span>
+            <span class="badge ${classeResposta(c.resposta)}">${rotuloResposta(c.resposta)}</span>
+          </li>`).join("")}</ul>`
+        : `<p class="nota">Nenhum convidado.</p>`}
+      </div>`;
+
+    const excluir = organizador ? `
+      <div class="acoes esquerda">
+        <span></span>
+        <button type="button" class="btn btn-perigo" data-acao="excluir">Excluir reunião</button>
+      </div>` : "";
+
+    conteudo.innerHTML = `
+      <div class="modal-topo">
+        <h2>${esc(e.titulo)}</h2>
+        <button type="button" class="fechar" data-acao="fechar" aria-label="Fechar">&times;</button>
+      </div>
+      <div class="meta">
+        <span>📅 ${esc(f.semana)}, ${f.dia} de ${esc(f.mesLongo)} de ${f.ano}</span>
+        <span>🕒 ${esc(e.hora)}</span>
+        <span>📍 ${esc(e.local || "Sem local definido")}</span>
+      </div>
+      <div class="badges">
+        <span class="badge">${e.visibilidade === "publica" ? "Pública" : "Privada"}</span>
+        <span class="badge">${e.aceitaPedidos ? "Aceita pedidos" : "Pedidos fechados"}</span>
+        ${badgeStatus(e)}
+      </div>
+      ${e.descricao ? `<div class="bloco"><h4>Descrição</h4><p>${esc(e.descricao)}</p></div>` : ""}
+      <div class="bloco"><h4>Organizador</h4><p>${esc(e.criador.nome)}</p></div>
+      ${rsvp}
+      ${pedir}
+      ${statusPedido}
+      ${participantes}
+      ${listaPedidos}
+      ${excluir}
+    `;
+  }
+
+  function abrirDetalhe(id) {
+    renderDetalhe(id);
+    if (eventoAberto && !modalDetalhe.open) modalDetalhe.showModal();
+  }
+
+  conteudo.addEventListener("click", (ev) => {
+    const btn = ev.target.closest("[data-acao]");
+    if (!btn || !eventoAberto) return;
+    const e = eventos.find((x) => x.id === eventoAberto);
+    if (!e) return;
+    const acao = btn.dataset.acao;
+
+    if (acao === "fechar") return modalDetalhe.close();
+
+    if (acao === "resposta") {
+      const p = minhaParticipacao(e);
+      if (p) p.resposta = btn.dataset.valor;
+    }
+
+    if (acao === "pedir") {
+      if (!podePedir(e)) return;
+      e.pedidos.push({ id: eu.id, nome: eu.nome, estado: "pendente" });
+      mostrarToast("Pedido enviado ao organizador.");
+    }
+
+    if (acao === "aceitar" || acao === "recusar") {
+      const pd = e.pedidos.find((x) => x.id === btn.dataset.pessoa);
+      if (!pd) return;
+      if (acao === "aceitar") {
+        pd.estado = "aceito";
+        const jaConvidado = e.convidados.some((c) => c.id === pd.id || norm(c.nome) === norm(pd.nome));
+        if (!jaConvidado) e.convidados.push({ id: pd.id, nome: pd.nome, resposta: null });
+      } else {
+        pd.estado = "recusado";
+      }
+    }
+
+    if (acao === "excluir") {
+      if (!confirm("Excluir esta reunião para todos?")) return;
+      eventos = eventos.filter((x) => x.id !== e.id);
+      salvarEventos();
+      modalDetalhe.close();
+      eventoAberto = null;
+      renderLista();
+      mostrarToast("Reunião excluída.");
+      return;
+    }
+
+    if (salvarEventos()) {
+      renderDetalhe(e.id);
+      renderLista();
+    }
+  });
+
+  modalDetalhe.addEventListener("close", () => { eventoAberto = null; });
+
+  /* ================= Eventos gerais ================= */
+
+  function atualizarAbas() {
+    document.querySelectorAll(".aba").forEach((b) => {
+      const ativa = b.dataset.aba === abaAtiva;
+      b.classList.toggle("ativa", ativa);
+      b.setAttribute("aria-selected", String(ativa));
+    });
+  }
+
+  document.querySelectorAll(".aba").forEach((b) =>
+    b.addEventListener("click", () => {
+      abaAtiva = b.dataset.aba;
+      atualizarAbas();
+      renderLista();
+    }));
+
+  filtroMes.addEventListener("change", renderLista);
+  document.getElementById("limpar-mes").addEventListener("click", () => {
+    filtroMes.value = "";
+    renderLista();
+  });
+
+  document.getElementById("btn-nova").addEventListener("click", abrirNova);
+
+  document.querySelectorAll("[data-fechar]").forEach((b) =>
+    b.addEventListener("click", () => modalNova.close()));
+
+  [modalNova, modalDetalhe].forEach((m) =>
+    m.addEventListener("click", (ev) => { if (ev.target === m) m.close(); }));
+
+  lista.addEventListener("click", (ev) => {
+    const card = ev.target.closest(".card");
+    if (card) abrirDetalhe(card.dataset.id);
+  });
+
+  lista.addEventListener("keydown", (ev) => {
+    const card = ev.target.closest(".card");
+    if (card && (ev.key === "Enter" || ev.key === " ")) {
+      ev.preventDefault();
+      abrirDetalhe(card.dataset.id);
+    }
+  });
+
+  /* ================= Início ================= */
+
+  carregarEventos();
+  renderLista();
+})();
+</script>
 
 </body>
 </html>

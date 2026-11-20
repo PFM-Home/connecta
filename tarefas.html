@@ -1,85 +1,416 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connecta — Agenda de Contatos</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Connecta - Tarefas</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body data-protegida="true">
 
-    <header class="main-header">
-        <div class="header-container">
+  <header class="topo">
+    <a class="logo" href="index.html">Connecta</a>
+    <nav class="menu" id="menu">
+      <a href="index.html">Início</a>
+      <a href="agenda.html">Agenda</a>
+      <a href="tarefas.html" class="ativo">Tarefas</a>
+      <a href="grupos.html">Grupos</a>
+      <a href="lembretes.html">Lembretes</a>
+      <a href="configuracoes.html">Configurações</a>
+    </nav>
+    <div id="auth-area" class="auth-area"></div>
+  </header>
 
-            <a href="index.html" class="logo-link" title="Connecta Home">
-                <img src="assets/logo_connecta.png" alt="Logotipo do Connecta" class="logo-img" width="36" height="36">
-                <span class="logo-text">Connecta</span>
-            </a>
+  <main id="app" data-pagina="tarefas" class="pagina">
+    <section class="cabecalho-pagina">
+      <h1>Minhas Tarefas</h1>
+      <p class="descricao">Organize suas atividades, defina prioridades e acompanhe o que já foi concluído.</p>
+    </section>
 
-            <form class="search-form" action="#" method="GET" role="search">
-                <div class="search-wrapper">
-                    <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                    </svg>
-                    <input type="search" class="search-input" placeholder="Buscar no Connecta..." aria-label="Buscar no Connecta">
-                </div>
-            </form>
+    <section class="card">
+      <h2>Nova tarefa</h2>
+      <form id="form-tarefa" novalidate>
+        <input type="hidden" id="tarefa-id">
 
-            <div class="header-actions">
-                <button type="button" class="btn btn-outline">Entrar</button>
-                <button type="button" class="btn btn-primary">Criar Conta</button>
-                <button type="button" class="btn-menu-mobile" aria-label="Abrir menu de navegação móvel">
-                    <svg class="hamburger-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <line x1="3" y1="12" x2="21" y2="12"></line>
-                        <line x1="3" y1="6" x2="21" y2="6"></line>
-                        <line x1="3" y1="18" x2="21" y2="18"></line>
-                    </svg>
-                </button>
-            </div>
-
+        <div class="campo">
+          <label for="tarefa-titulo">Título <span class="obrigatorio">*</span></label>
+          <input type="text" id="tarefa-titulo" maxlength="120" placeholder="Ex.: Enviar relatório mensal" required>
+          <small class="erro" id="erro-titulo"></small>
         </div>
-    </header>
 
-    <div class="app-layout">
-        <aside class="sidebar">
-            <nav class="sidebar-nav" aria-label="Navegação Lateral">
-                <ul class="sidebar-list">
-                    <li class="sidebar-item">
-                        <a href="index.html" class="sidebar-link">Contatos</a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a href="agenda.html" class="sidebar-link">Agenda</a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a href="tarefas.html" class="sidebar-link">Tarefas</a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a href="grupos.html" class="sidebar-link">Grupos</a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a href="lembretes.html" class="sidebar-link">Lembretes</a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a href="configuracoes.html" class="sidebar-link">Configurações</a>
-                    </li>
-                </ul>
-            </nav>
+        <div class="linha">
+          <div class="campo">
+            <label for="tarefa-prazo">Prazo</label>
+            <input type="date" id="tarefa-prazo">
+            <small class="erro" id="erro-prazo"></small>
+          </div>
 
-            <div class="sidebar-footer">
-                <a href="index.html" class="btn-back-home">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <line x1="19" y1="12" x2="5" y2="12"></line>
-                        <polyline points="12 19 5 12 12 5"></polyline>
-                    </svg>
-                    <span>Voltar ao Início</span>
-                </a>
-            </div>
-        </aside>
+          <div class="campo">
+            <label for="tarefa-prioridade">Prioridade</label>
+            <select id="tarefa-prioridade">
+              <option value="baixa">Baixa</option>
+              <option value="media" selected>Média</option>
+              <option value="alta">Alta</option>
+            </select>
+          </div>
 
-        <main class="main-content">
-        </main>
+          <div class="campo">
+            <label for="tarefa-status">Status</label>
+            <select id="tarefa-status">
+              <option value="pendente" selected>Pendente</option>
+              <option value="andamento">Em andamento</option>
+              <option value="concluida">Concluída</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="campo">
+          <label for="tarefa-descricao">Descrição</label>
+          <textarea id="tarefa-descricao" rows="3" maxlength="500" placeholder="Detalhes opcionais"></textarea>
+        </div>
+
+        <p class="legenda">Campos marcados com <span class="obrigatorio">*</span> são obrigatórios.</p>
+
+        <div class="acoes">
+          <button type="submit" class="botao primario" id="btn-salvar">Adicionar tarefa</button>
+          <button type="button" class="botao secundario" id="btn-cancelar" hidden>Cancelar edição</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="card">
+      <div class="barra-filtros">
+        <div class="abas" role="tablist">
+          <button class="aba ativa" data-filtro="todas">Todas</button>
+          <button class="aba" data-filtro="pendente">Pendentes</button>
+          <button class="aba" data-filtro="andamento">Em andamento</button>
+          <button class="aba" data-filtro="concluida">Concluídas</button>
+        </div>
+        <input type="search" id="busca" placeholder="Buscar tarefas...">
+      </div>
+
+      <p class="contador" id="contador"></p>
+      <ul class="lista-tarefas" id="lista-tarefas"></ul>
+      <p class="vazio" id="vazio" hidden>Nenhuma tarefa encontrada.</p>
+
+      <div class="acoes-rodape">
+        <button type="button" class="botao secundario" id="btn-limpar-concluidas">Remover concluídas</button>
+      </div>
+    </section>
+  </main>
+
+  <div class="modal" id="modal-confirmacao" hidden>
+    <div class="modal-conteudo">
+      <h3>Confirmar exclusão</h3>
+      <p id="modal-texto">Deseja realmente excluir esta tarefa?</p>
+      <div class="acoes">
+        <button type="button" class="botao secundario" id="modal-cancelar">Cancelar</button>
+        <button type="button" class="botao perigo" id="modal-confirmar">Excluir</button>
+      </div>
     </div>
+  </div>
 
+  <script src="script.js"></script>
+  <script>
+    (function () {
+      const CHAVE_USUARIOS = 'connecta_usuarios';
+      const CHAVE_SESSAO = 'connecta_sessao';
+
+      // ----- Sessão -----
+      function lerSessao() {
+        const bruto = sessionStorage.getItem(CHAVE_SESSAO) || localStorage.getItem(CHAVE_SESSAO);
+        if (!bruto) return null;
+        try {
+          return JSON.parse(bruto);
+        } catch (e) {
+          return { usuario: bruto };
+        }
+      }
+
+      const sessao = lerSessao();
+      if (!sessao) {
+        window.location.replace('login.html?next=' + encodeURIComponent('tarefas.html'));
+        return;
+      }
+
+      const usuarioId = String(sessao.usuario || sessao.email || sessao.id || 'anonimo');
+      const CHAVE_TAREFAS = 'connecta_tarefas_' + usuarioId;
+
+      // ----- Elementos -----
+      const form = document.getElementById('form-tarefa');
+      const inputId = document.getElementById('tarefa-id');
+      const inputTitulo = document.getElementById('tarefa-titulo');
+      const inputPrazo = document.getElementById('tarefa-prazo');
+      const inputPrioridade = document.getElementById('tarefa-prioridade');
+      const inputStatus = document.getElementById('tarefa-status');
+      const inputDescricao = document.getElementById('tarefa-descricao');
+      const btnSalvar = document.getElementById('btn-salvar');
+      const btnCancelar = document.getElementById('btn-cancelar');
+      const lista = document.getElementById('lista-tarefas');
+      const vazio = document.getElementById('vazio');
+      const contador = document.getElementById('contador');
+      const busca = document.getElementById('busca');
+      const abas = document.querySelectorAll('.aba');
+      const btnLimpar = document.getElementById('btn-limpar-concluidas');
+      const modal = document.getElementById('modal-confirmacao');
+      const modalConfirmar = document.getElementById('modal-confirmar');
+      const modalCancelar = document.getElementById('modal-cancelar');
+
+      let filtroAtual = 'todas';
+      let idParaExcluir = null;
+
+      // ----- Auth area -----
+      const authArea = document.getElementById('auth-area');
+      if (authArea) {
+        const nome = sessao.nome || sessao.usuario || 'usuário';
+        authArea.innerHTML =
+          '<span class="saudacao">Olá, ' + escapar(nome) + '</span> ' +
+          '<button type="button" class="botao secundario" id="btn-sair">Sair</button>';
+        document.getElementById('btn-sair').addEventListener('click', function () {
+          sessionStorage.removeItem(CHAVE_SESSAO);
+          localStorage.removeItem(CHAVE_SESSAO);
+          window.location.href = 'login.html';
+        });
+      }
+
+      // ----- Dados -----
+      function carregar() {
+        try {
+          return JSON.parse(localStorage.getItem(CHAVE_TAREFAS)) || [];
+        } catch (e) {
+          return [];
+        }
+      }
+
+      function salvar(tarefas) {
+        localStorage.setItem(CHAVE_TAREFAS, JSON.stringify(tarefas));
+      }
+
+      function gerarId() {
+        return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+      }
+
+      function escapar(texto) {
+        const div = document.createElement('div');
+        div.textContent = texto == null ? '' : String(texto);
+        return div.innerHTML;
+      }
+
+      function formatarData(iso) {
+        if (!iso) return 'Sem prazo';
+        const [ano, mes, dia] = iso.split('-');
+        return dia + '/' + mes + '/' + ano;
+      }
+
+      function rotuloPrioridade(p) {
+        return { baixa: 'Baixa', media: 'Média', alta: 'Alta' }[p] || 'Média';
+      }
+
+      function rotuloStatus(s) {
+        return { pendente: 'Pendente', andamento: 'Em andamento', concluida: 'Concluída' }[s] || 'Pendente';
+      }
+
+      // ----- Validação -----
+      function limparErros() {
+        document.querySelectorAll('.erro').forEach(function (el) { el.textContent = ''; });
+        document.querySelectorAll('.campo.invalido').forEach(function (el) { el.classList.remove('invalido'); });
+      }
+
+      function mostrarErro(campo, id, mensagem) {
+        const el = document.getElementById(id);
+        if (el) el.textContent = mensagem;
+        if (campo && campo.parentElement) campo.parentElement.classList.add('invalido');
+      }
+
+      function validar() {
+        limparErros();
+        let ok = true;
+        const titulo = inputTitulo.value.trim();
+
+        if (!titulo) {
+          mostrarErro(inputTitulo, 'erro-titulo', 'O título é obrigatório.');
+          inputTitulo.focus();
+          ok = false;
+        }
+
+        if (inputPrazo.value && isNaN(Date.parse(inputPrazo.value))) {
+          mostrarErro(inputPrazo, 'erro-prazo', 'Informe uma data válida.');
+          ok = false;
+        }
+
+        return ok;
+      }
+
+      // ----- Renderização -----
+      function tarefasFiltradas() {
+        const termo = busca.value.trim().toLowerCase();
+        return carregar().filter(function (t) {
+          const passaFiltro = filtroAtual === 'todas' || t.status === filtroAtual;
+          const passaBusca = !termo ||
+            t.titulo.toLowerCase().indexOf(termo) !== -1 ||
+            (t.descricao || '').toLowerCase().indexOf(termo) !== -1;
+          return passaFiltro && passaBusca;
+        }).sort(function (a, b) {
+          const ordem = { alta: 0, media: 1, baixa: 2 };
+          if (a.status === 'concluida' && b.status !== 'concluida') return 1;
+          if (b.status === 'concluida' && a.status !== 'concluida') return -1;
+          if (ordem[a.prioridade] !== ordem[b.prioridade]) return ordem[a.prioridade] - ordem[b.prioridade];
+          if (a.prazo && b.prazo) return a.prazo.localeCompare(b.prazo);
+          if (a.prazo) return -1;
+          if (b.prazo) return 1;
+          return a.criadoEm - b.criadoEm;
+        });
+      }
+
+      function renderizar() {
+        const todas = carregar();
+        const visiveis = tarefasFiltradas();
+
+        lista.innerHTML = visiveis.map(function (t) {
+          const concluida = t.status === 'concluida';
+          return (
+            '<li class="item-tarefa prioridade-' + t.prioridade + (concluida ? ' concluida' : '') + '" data-id="' + t.id + '">' +
+              '<label class="marcador">' +
+                '<input type="checkbox" class="check-concluir"' + (concluida ? ' checked' : '') + '>' +
+              '</label>' +
+              '<div class="conteudo-tarefa">' +
+                '<strong class="titulo-tarefa">' + escapar(t.titulo) + '</strong>' +
+                (t.descricao ? '<p class="descricao-tarefa">' + escapar(t.descricao) + '</p>' : '') +
+                '<div class="meta">' +
+                  '<span class="badge badge-' + t.prioridade + '">' + rotuloPrioridade(t.prioridade) + '</span>' +
+                  '<span class="badge">' + rotuloStatus(t.status) + '</span>' +
+                  '<span class="prazo">Prazo: ' + formatarData(t.prazo) + '</span>' +
+                '</div>' +
+              '</div>' +
+              '<div class="acoes-item">' +
+                '<button type="button" class="botao pequeno" data-acao="editar">Editar</button>' +
+                '<button type="button" class="botao pequeno perigo" data-acao="excluir">Excluir</button>' +
+              '</div>' +
+            '</li>'
+          );
+        }).join('');
+
+        vazio.hidden = visiveis.length > 0;
+        const concluidas = todas.filter(function (t) { return t.status === 'concluida'; }).length;
+        contador.textContent = todas.length + ' tarefa(s) no total, ' + concluidas + ' concluída(s).';
+        btnLimpar.disabled = concluidas === 0;
+      }
+
+      // ----- Ações -----
+      function resetarFormulario() {
+        form.reset();
+        inputId.value = '';
+        inputPrioridade.value = 'media';
+        inputStatus.value = 'pendente';
+        btnSalvar.textContent = 'Adicionar tarefa';
+        btnCancelar.hidden = true;
+        limparErros();
+      }
+
+      function preencherFormulario(t) {
+        inputId.value = t.id;
+        inputTitulo.value = t.titulo;
+        inputPrazo.value = t.prazo || '';
+        inputPrioridade.value = t.prioridade;
+        inputStatus.value = t.status;
+        inputDescricao.value = t.descricao || '';
+        btnSalvar.textContent = 'Salvar alterações';
+        btnCancelar.hidden = false;
+        inputTitulo.focus();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        if (!validar()) return;
+
+        const tarefas = carregar();
+        const dados = {
+          titulo: inputTitulo.value.trim(),
+          prazo: inputPrazo.value || '',
+          prioridade: inputPrioridade.value,
+          status: inputStatus.value,
+          descricao: inputDescricao.value.trim()
+        };
+
+        if (inputId.value) {
+          const indice = tarefas.findIndex(function (t) { return t.id === inputId.value; });
+          if (indice !== -1) {
+            tarefas[indice] = Object.assign({}, tarefas[indice], dados, { atualizadoEm: Date.now() });
+          }
+        } else {
+          tarefas.push(Object.assign({ id: gerarId(), criadoEm: Date.now() }, dados));
+        }
+
+        salvar(tarefas);
+        resetarFormulario();
+        renderizar();
+      });
+
+      btnCancelar.addEventListener('click', resetarFormulario);
+
+      lista.addEventListener('change', function (e) {
+        if (!e.target.classList.contains('check-concluir')) return;
+        const id = e.target.closest('.item-tarefa').dataset.id;
+        const tarefas = carregar();
+        const t = tarefas.find(function (x) { return x.id === id; });
+        if (t) {
+          t.status = e.target.checked ? 'concluida' : 'pendente';
+          salvar(tarefas);
+          renderizar();
+        }
+      });
+
+      lista.addEventListener('click', function (e) {
+        const botao = e.target.closest('[data-acao]');
+        if (!botao) return;
+        const id = botao.closest('.item-tarefa').dataset.id;
+
+        if (botao.dataset.acao === 'editar') {
+          const t = carregar().find(function (x) { return x.id === id; });
+          if (t) preencherFormulario(t);
+        }
+
+        if (botao.dataset.acao === 'excluir') {
+          idParaExcluir = id;
+          modal.hidden = false;
+        }
+      });
+
+      modalCancelar.addEventListener('click', function () {
+        idParaExcluir = null;
+        modal.hidden = true;
+      });
+
+      modalConfirmar.addEventListener('click', function () {
+        if (idParaExcluir) {
+          salvar(carregar().filter(function (t) { return t.id !== idParaExcluir; }));
+          if (inputId.value === idParaExcluir) resetarFormulario();
+          renderizar();
+        }
+        idParaExcluir = null;
+        modal.hidden = true;
+      });
+
+      btnLimpar.addEventListener('click', function () {
+        if (!confirm('Remover todas as tarefas concluídas?')) return;
+        salvar(carregar().filter(function (t) { return t.status !== 'concluida'; }));
+        renderizar();
+      });
+
+      abas.forEach(function (aba) {
+        aba.addEventListener('click', function () {
+          abas.forEach(function (a) { a.classList.remove('ativa'); });
+          aba.classList.add('ativa');
+          filtroAtual = aba.dataset.filtro;
+          renderizar();
+        });
+      });
+
+      busca.addEventListener('input', renderizar);
+
+      renderizar();
+    })();
+  </script>
 </body>
 </html>
