@@ -395,3 +395,92 @@ button, input { font: inherit; color: inherit; }
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; scroll-behavior: auto !important; }
 }
+
+/* 8. Autenticação --------------------------------------------------------- */
+.auth { padding: clamp(3rem, 8vw, 6rem) 0; }
+
+.auth-card {
+  max-width: 440px;
+  margin-inline: auto;
+  padding: 2rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: 0 30px 60px -20px rgb(20 32 43 / 0.25);
+}
+
+.auth-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  margin-bottom: 1.75rem;
+  padding: 4px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+}
+
+.auth-tab {
+  padding: 0.55rem;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.auth-tab.is-active {
+  background: var(--surface);
+  color: var(--brand);
+  box-shadow: 0 1px 3px rgb(20 32 43 / 0.1);
+}
+
+.auth-form { display: grid; gap: 1rem; }
+.auth-form[hidden] { display: none; }
+
+.field { display: grid; gap: 0.35rem; }
+.field label { font-size: 0.9rem; font-weight: 500; }
+
+.field input {
+  padding: 0.7rem 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--bg);
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+}
+
+.field input:focus {
+  outline: none;
+  border-color: var(--brand);
+  background: var(--surface);
+  box-shadow: 0 0 0 3px var(--brand-soft);
+}
+
+.field input.is-invalid { border-color: #b42318; }
+
+.auth-options {
+  display: flex;
+  align-items: center;
+  font-size: 0.88rem;
+  color: var(--muted);
+}
+
+.auth-options label { display: flex; align-items: center; gap: 0.4rem; cursor: pointer; }
+
+.auth-form .btn--lg { width: 100%; margin-top: 0.5rem; }
+.auth-form .btn:disabled { opacity: 0.6; cursor: wait; }
+
+.auth-msg {
+  min-height: 1.4em;
+  font-size: 0.9rem;
+  text-align: center;
+  color: var(--muted);
+}
+
+.auth-msg.is-error { color: #b42318; }
+.auth-msg.is-success { color: var(--brand); }
+
+@media (max-width: 480px) {
+  .auth-card { padding: 1.5rem; }
+}

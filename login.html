@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Entrar ou criar conta — Connecta</title>
+  <meta name="description" content="Acesse sua conta ou crie uma nova no Connecta.">
+
+  <link rel="icon" href="images/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container header-inner">
+
+      <a class="logo" href="index.html">
+        <img src="assets/logo_connecta.png" alt="" width="36" height="36">
+        <span>
+          <strong>connecta</strong>
+          <small>Agenda de contatos</small>
+        </span>
+      </a>
+
+      <nav class="site-nav" id="menu" aria-label="Principal">
+        <ul>
+          <li><a href="contatos.html">Contatos</a></li>
+          <li><a href="agenda.html">Agenda</a></li>
+          <li><a href="tarefas.html">Tarefas</a></li>
+          <li><a href="grupos.html">Grupos</a></li>
+          <li><a href="lembretes.html">Lembretes</a></li>
+          <li><a href="configuracoes.html">Configurações</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-actions">
+        <a class="btn btn--ghost" href="login.html" aria-current="page">Entrar</a>
+        <a class="btn btn--primary" href="login.html?tab=register">Criar conta</a>
+      </div>
+
+      <button type="button" class="menu-toggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="menu">
+        <span></span><span></span><span></span>
+      </button>
+
+    </div>
+  </header>
+
+  <div class="overlay"></div>
+
+  <main>
+    <section class="auth">
+      <div class="container">
+        <div class="auth-card">
+
+          <div class="auth-tabs" role="tablist" aria-label="Acesso à conta">
+            <button type="button" role="tab" id="tab-login" class="auth-tab is-active"
+                    aria-selected="true" aria-controls="form-login" data-tab="login">Entrar</button>
+            <button type="button" role="tab" id="tab-register" class="auth-tab"
+                    aria-selected="false" aria-controls="form-register" data-tab="register">Criar conta</button>
+          </div>
+
+          <!-- Formulário de login -->
+          <form id="form-login" class="auth-form" role="tabpanel" aria-labelledby="tab-login" novalidate>
+            <div class="field">
+              <label for="login-email">E-mail</label>
+              <input id="login-email" name="email" type="email" autocomplete="email" placeholder="voce@email.com" required>
+            </div>
+
+            <div class="field">
+              <label for="login-senha">Senha</label>
+              <input id="login-senha" name="senha" type="password" autocomplete="current-password" placeholder="Sua senha" required>
+            </div>
+
+            <div class="auth-options">
+              <label>
+                <input type="checkbox" name="lembrar"> Manter conectado
+              </label>
+            </div>
+
+            <button type="submit" class="btn btn--primary btn--lg">Entrar</button>
+            <p class="auth-msg" role="alert" aria-live="polite"></p>
+          </form>
+
+          <!-- Formulário de cadastro -->
+          <form id="form-register" class="auth-form" role="tabpanel" aria-labelledby="tab-register" hidden novalidate>
+            <div class="field">
+              <label for="reg-nome">Nome</label>
+              <input id="reg-nome" name="nome" type="text" autocomplete="name" placeholder="Seu nome" required>
+            </div>
+
+            <div class="field">
+              <label for="reg-email">E-mail</label>
+              <input id="reg-email" name="email" type="email" autocomplete="email" placeholder="voce@email.com" required>
+            </div>
+
+            <div class="field">
+              <label for="reg-senha">Senha</label>
+              <input id="reg-senha" name="senha" type="password" autocomplete="new-password" placeholder="Mínimo de 8 caracteres" required>
+            </div>
+
+            <div class="field">
+              <label for="reg-confirmar">Confirmar senha</label>
+              <input id="reg-confirmar" name="confirmar" type="password" autocomplete="new-password" placeholder="Repita a senha" required>
+            </div>
+
+            <button type="submit" class="btn btn--primary btn--lg">Criar conta</button>
+            <p class="auth-msg" role="alert" aria-live="polite"></p>
+          </form>
+
+        </div>
+      </div>
+    </section>
+  </main>
+
+</body>
+</html>
